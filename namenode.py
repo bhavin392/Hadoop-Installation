@@ -91,7 +91,7 @@ def main():
     "export HADOOP_HDFS_HOME=/home/hduser/hadoop-2.7.3\n",
     "export YARN_HOME=/home/hduser/hadoop-2.7.3\n",
     "export PATH=$PATH:/home/hduser/hadoop-2.7.3/bin\n",
-    "Set Java Home\n",
+    "# Set Java Home\n",
     "export JAVA_HOME=/home/hduser/jdk1.8.0_241\n",
     "export PATH=/home/hduser/jdk1.8.0_241/bin:$PATH\n"])
     f.close()
