@@ -1,0 +1,86 @@
+import sys
+import os
+from os import path
+
+
+NamenodeName=[]
+NamenodeIP=[]
+DataNodeName=[]
+DataNodeIP=[]
+
+
+def numNamefunc():
+    try:
+        numNameNodes=int(input("Enter the number of Name Nodes\n"))
+        if(numNameNodes<0):
+            print("Number of Name Nodes Cannot be Negative")
+            numNamefunc()
+    except ValueError:
+        print("Error: Enter a valid Integer Number for Number of Name Nodes\n")
+        numNamefunc()
+    return numNameNodes
+def numDatafunc():
+    try:
+        numDataNodes=int(input("Enter the number of Data Nodes\n"))
+        if(numDataNodes<0):
+            print("Number of Data Nodes Cannot be Negative")
+            numDatafunc()
+    except ValueError:
+        print("Error: Enter a valid Integer Number for Number of Data Nodes\n")
+        numDatafunc()
+    return numDataNodes
+
+def readFile():
+    with open("input.txt") as fp:
+        line=fp.readline()
+        cnt=0
+        while line:
+            splitUser=line.split(':')
+            splitData=splitUser[1].split('\t')
+            if(splitUser[0]=='master'):
+                NamenodeName.append(splitData[0])
+                NamenodeIP.append(splitData[1])
+            elif(splitUser[0]=='slave'):
+                DataNodeName.append(splitData[0])
+                DataNodeIP.append(splitData[1])
+            line=fp.readline()
+            cnt+=1
+
+
+
+def NodeInput(numNameNodes,NumDataNodes):
+    if(path.exists("input.txt")==True):
+        readFile()
+    else:
+        f=open("input.txt","w")
+        for x in range(0,numNameNodes):
+            inputNameNode= input("Enter the name of Name Node "+str(x+1)+"\n")
+            inputIPNameNode= input("Enter the Ip address of Name Node" +str(x+1)+"\n")
+            NamenodeName.append(inputNameNode)
+            NamenodeIP.append(inputIPNameNode)
+            f.writelines(["master:",inputNameNode,"\t",inputIPNameNode,"\n"])
+        for y in range(0,NumDataNodes):
+            inputDataNode= input("Enter the name of Data Node "+str(y+1)+"\n")
+            inputIPDataNode=input("Enter the Ip address of Data Node"+str(y+1)+"\n")
+            DataNodeName.append(inputDataNode)
+            DataNodeIP.append(inputIPDataNode)
+            f.writelines(["slave:",inputDataNode,"\t",inputIPDataNode,"\n"])
+        f.close()    
+def main():
+    print("Welcome to Hadoop Installation Please run this python namenode side\n")
+    numNameNodes=numNamefunc()
+    numDataNodes=numDatafunc()
+    NodeInput(numNameNodes,numDataNodes)
+    cmd='wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz'
+    cmd1='tar -xvf hadoop-2.7.3.tar.gz'
+    if(path.exists("hadoop-2.7.3.tar.gz")!=True):
+        os.system(cmd)
+    if(path.exists("hadoop-2.7.3")!=True):
+        os.system(cmd1)
+    
+
+    
+
+if __name__ == "__main__":
+    main()    
+
