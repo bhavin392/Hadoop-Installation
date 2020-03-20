@@ -68,14 +68,17 @@ def NodeInput(numNameNodes,NumDataNodes):
         f.close()    
 def main():
     print("Welcome to Hadoop Installation Please run this python namenode side\n")
+    if(path.exists("/home/hduser")!=True):
+        os.system('sudo adduser hduser')
+        os.system('sudo usermod -aG sudo hduser')
     numNameNodes=numNamefunc()
     numDataNodes=numDatafunc()
     NodeInput(numNameNodes,numDataNodes)
-    cmd='wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz'
-    cmd1='tar -xvf hadoop-2.7.3.tar.gz'
-    if(path.exists("hadoop-2.7.3.tar.gz")!=True):
+    cmd='sudo wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz -P /home/hduser'
+    cmd1='sudo tar -xvf /home/hduser/hadoop-2.7.3.tar.gz -C /home/hduser'
+    if(path.exists("/home/hduser/hadoop-2.7.3.tar.gz")!=True):
         os.system(cmd)
-    if(path.exists("hadoop-2.7.3")!=True):
+    if(path.exists("/home/hduser/hadoop-2.7.3")!=True):
         os.system(cmd1)
     
 
