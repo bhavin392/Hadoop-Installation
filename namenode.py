@@ -49,10 +49,10 @@ def readFile():
 
 
 def NodeInput(numNameNodes,NumDataNodes):
-    if(path.exists("input.txt")==True):
+    if(path.exists("/home/hduser/input.txt")==True):
         readFile()
     else:
-        f=open("input.txt","w")
+        f=open("/home/hduser/input.txt","w")
         for x in range(0,numNameNodes):
             inputNameNode= input("Enter the name of Name Node "+str(x+1)+"\n")
             inputIPNameNode= input("Enter the Ip address of Name Node" +str(x+1)+"\n")
@@ -68,17 +68,36 @@ def NodeInput(numNameNodes,NumDataNodes):
         f.close()    
 def main():
     print("Welcome to Hadoop Installation Please run this python namenode side\n")
+    if(path.exists("/home/hduser")!=True):
+        os.system('sudo adduser hduser')
+        os.system('sudo usermod -aG sudo hduser')
     numNameNodes=numNamefunc()
     numDataNodes=numDatafunc()
     NodeInput(numNameNodes,numDataNodes)
-    cmd='wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz'
-    cmd1='tar -xvf hadoop-2.7.3.tar.gz'
-    if(path.exists("hadoop-2.7.3.tar.gz")!=True):
+    cmd='sudo wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz -P /home/hduser'
+    cmd1='sudo tar -xvf /home/hduser/hadoop-2.7.3.tar.gz -C /home/hduser'
+    if(path.exists("/home/hduser/hadoop-2.7.3.tar.gz")!=True):
         os.system(cmd)
-    if(path.exists("hadoop-2.7.3")!=True):
+    if(path.exists("/home/hduser/hadoop-2.7.3")!=True):
         os.system(cmd1)
+    if(path.exists("/home/hduser/jdk1.8.0_241")!=True):
+        os.system('sudo tar -xvf jdk1.8.0_241.tar.xz -C /home/hduser')
+    f=open("/home/hduser/.bashrc","a")
+    f.writelines(["# User Specific aliases and functions\n",
+    "export HADOOP_HOME=/home/hduser/hadoop-2.7.3\n",
+    "export HADOOP_CONF_DIR=/home/hduser/hadoop-2.7.3/etc/hadoop\n",
+    "export HADOOP_MAPRED_HOME=/home/hduser/hadoop-2.7.3\n",
+    "export HADOOP_COMMON_HOME=/home/hduser/hadoop-2.7.3\n",
+    "export HADOOP_HDFS_HOME=/home/hduser/hadoop-2.7.3\n",
+    "export YARN_HOME=/home/hduser/hadoop-2.7.3\n",
+    "export PATH=$PATH:/home/hduser/hadoop-2.7.3/bin\n",
+    "Set Java Home\n",
+    "export JAVA_HOME=/home/hduser/jdk1.8.0_241\n",
+    "export PATH=/home/hduser/jdk1.8.0_241/bin:$PATH\n"])
+    f.close()
+    os.system('sudo -s source /home/hduser/.bashrc')
+    os.system('exit')
     
-
     
 
 if __name__ == "__main__":
