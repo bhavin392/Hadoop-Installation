@@ -98,6 +98,24 @@ def main():
     os.system('sudo -s source /home/hduser/.bashrc')
     os.system('exit')
     
+    f=open("/etc/hosts","w")
+    for x in range(0,len(NamenodeName)):
+        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]],"\n")
+    for y in range(0,len(DataNodeName)):
+        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]],"\n")
+    f.writelines(["\n\n",
+    "# The following lines are desirable for IPV6 capable Hosts\n",
+    "::1\tip6-localhost ip6-loopback\n",
+    "fe00::0 ip6-localnet\n",
+    "ff00::0 ip6-mcastprefix\n",
+    "ff02::1 ip6-allnodes\n",
+    "ff02::2 ip6-allrouters\n"])
+    f.close()
+
+    f=open("/etc/hostname","w")
+    for x in range(0,len(DataNodeName)):
+        f.writelines([DataNodeName[x],"\n"])
+    f.close()
     
 
 if __name__ == "__main__":

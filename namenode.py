@@ -82,6 +82,7 @@ def main():
         os.system(cmd1)
     if(path.exists("/home/hduser/jdk1.8.0_241")!=True):
         os.system('sudo tar -xvf jdk1.8.0_241.tar.xz -C /home/hduser')
+
     f=open("/home/hduser/.bashrc","a")
     f.writelines(["# User Specific aliases and functions\n",
     "export HADOOP_HOME=/home/hduser/hadoop-2.7.3\n",
@@ -97,6 +98,30 @@ def main():
     f.close()
     os.system('sudo -s source /home/hduser/.bashrc')
     os.system('exit')
+
+    f=open("/etc/hosts","w")
+    for x in range(0,len(NamenodeName)):
+        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]],"\n")
+    for y in range(0,len(DataNodeName)):
+        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]],"\n")
+    f.writelines(["\n\n",
+    "# The following lines are desirable for IPV6 capable Hosts\n",
+    "::1\tip6-localhost ip6-loopback\n",
+    "fe00::0 ip6-localnet\n",
+    "ff00::0 ip6-mcastprefix\n",
+    "ff02::1 ip6-allnodes\n",
+    "ff02::2 ip6-allrouters\n"])
+    f.close()
+
+    f=open("/etc/hostname","w")
+    for x in range(0,len(NamenodeName)):
+        f.writelines([NamenodeName[x],"\n"])
+    f.close()
+
+    os.system('su - hduser')
+    os.system('ssh-keygen -t rsa')
+    os.system('ssh-copy-id -i home/hduser/.ssh/id_rsa.pub hduser@slave')
+
     
     
 
