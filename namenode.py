@@ -101,9 +101,9 @@ def main():
 
     f=open("/etc/hosts","w")
     for x in range(0,len(NamenodeName)):
-        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]],"\n")
+        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]])
     for y in range(0,len(DataNodeName)):
-        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]],"\n")
+        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]])
     f.writelines(["\n\n",
     "# The following lines are desirable for IPV6 capable Hosts\n",
     "::1\tip6-localhost ip6-loopback\n",
@@ -117,10 +117,11 @@ def main():
     for x in range(0,len(NamenodeName)):
         f.writelines([NamenodeName[x],"\n"])
     f.close()
-
-    os.system('su - hduser')
-    os.system('ssh-keygen -t rsa')
-    os.system('ssh-copy-id -i home/hduser/.ssh/id_rsa.pub hduser@slave')
+    if(path.exists("/home/hduser/.ssh/id_rsa.pub")!=True):
+        string="'ssh-keygen -t rsa'"
+        string1="'ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@slave'"
+        os.system('su - hduser -c'+string)
+        os.system('su - hduser -c '+string1)
 
     
     
