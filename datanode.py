@@ -49,10 +49,10 @@ def readFile():
 
 
 def NodeInput(numNameNodes,NumDataNodes):
-    if(path.exists("/home/hduser/input.txt")==True):
+    if(path.exists("input.txt")==True):
         readFile()
     else:
-        f=open("/home/hduser/input.txt","w")
+        f=open("input.txt","w")
         for x in range(0,numNameNodes):
             inputNameNode= input("Enter the name of Name Node "+str(x+1)+"\n")
             inputIPNameNode= input("Enter the Ip address of Name Node" +str(x+1)+"\n")
@@ -97,12 +97,15 @@ def main():
     f.close()
     os.system('sudo -s source /home/hduser/.bashrc')
     os.system('exit')
-    
+    for x in range(0,len(NamenodeName)):
+        NamenodeIP[x]=NamenodeIP[x].strip('\n')
+    for y in range(0,len(DataNodeName)):
+        DataNodeIP[y]=DataNodeIP[x].strip('\n')   
     f=open("/etc/hosts","w")
     for x in range(0,len(NamenodeName)):
-        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]],"\n")
+        f.writelines([NamenodeIP[x]," ",NamenodeName[x],"\t",NamenodeIP[x],"\n"])
     for y in range(0,len(DataNodeName)):
-        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]],"\n")
+        f.writelines([DataNodeIP[y]," ",DataNodeName[y],"\t",DataNodeIP[y],"\n"])
     f.writelines(["\n\n",
     "# The following lines are desirable for IPV6 capable Hosts\n",
     "::1\tip6-localhost ip6-loopback\n",
@@ -158,8 +161,8 @@ def main():
     "</configuration>\n"])
     f.close()
 
-    stringx="/home/hduser/hadoop-2.7.3/bin/hadoop namenode -format"
-    os.system('su - hduser -c'+stringx)
+    #stringx="./home/hduser/hadoop-2.7.3/bin/hadoop namenode -format"
+    #s.system('su - hduser -c '+stringx)
 
     
 
