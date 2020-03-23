@@ -117,13 +117,69 @@ def main():
     for x in range(0,len(NamenodeName)):
         f.writelines([NamenodeName[x],"\n"])
     f.close()
-    if(path.exists("/home/hduser/.ssh/id_rsa.pub")!=True):
-        string="'ssh-keygen -t rsa'"
-        string1="'ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@slave'"
-        os.system('su - hduser -c'+string)
-        os.system('su - hduser -c '+string1)
+    
+    
+    f=open("/home/hduser/hadoop-2.7.3/etc/hadoop/slaves","w")
+    for x in range(0,len(NamenodeName)):
+        f.writelines([NamenodeName[x]])
+    for y in range(0,len(DataNodeName)):
+        f.writelines([DataNodeName[y]])
+    f.close()
+
+
+    string1="<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    string2="<?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>"
+    f=open("/home/hduser/hadoop-2.7.3/etc/hadoop/core-site.xml","w")
+    f.writelines([string1,"\n",
+    string2,"\n",
+    "<configuration>\n",
+    "<property>\n",
+    "<name>fs.default.name</name>\n",
+    "<value>hdfs://master:54310</value>\n",
+    "</property>\n",
+    "</configuration>\n"])
+    f.close()
+
+
+    f=open("/home/hduser/hadoop-2.7.3/etc/hadoop/mapred-site.xml","w")
+    f.writelines([string1,"\n",
+    string2,"\n",
+    "<configuration>\n",
+    "<property>\n",
+    "<name>mapreduce.framework.name</name>\n",
+    "<value>master:54311</value>\n",
+    "</property>\n",
+    "</configuration>\n"])
+    f.close()
+
+
+    f=open("/home/hduser/hadoop-2.7.3/etc/hadoop/hdfs-site.xml","w")
+    f.writelines([string1,"\n",
+    string2,"\n",
+    "<configuration>\n",
+    "<property>\n",
+    "<name>dfs.replication</name>\n",
+    "<value>2</value>\n",
+    "</property>\n",
+    "<property>\n",
+    "<name>dfs.permission</name>\n",
+    "<value>false</value>\n",
+    "</property>\n",
+    "</configuration>\n"])
+    f.close()
+
+    stringx="/home/hduser/hadoop-2.7.3/bin/hadoop namenode -format"
+    os.system('su - hduser -c'+stringx)
 
     
+    if(path.exists("/home/hduser/.ssh/id_rsa.pub")!=True):
+        string="'ssh-keygen -t rsa'"
+        stringx="'ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@slave'"
+        os.system('su - hduser -c'+string)
+        os.system('su - hduser -c '+stringx)
+
+    
+
     
 
 if __name__ == "__main__":
