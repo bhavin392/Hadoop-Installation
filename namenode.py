@@ -98,12 +98,16 @@ def main():
     f.close()
     os.system('sudo -s source /home/hduser/.bashrc')
     os.system('exit')
-
+    for x in range(0,len(NamenodeName)):
+        NamenodeIP[x]=NamenodeIP[x].strip('\n')
+    for y in range(0,len(DataNodeName)):
+        DataNodeIP[x]=DataNodeIP[x].strip('\n')
+        
     f=open("/etc/hosts","w")
     for x in range(0,len(NamenodeName)):
-        f.writelines([NamenodeName[x],"\t",NamenodeIP[x]])
+        f.writelines([NamenodeIP[x]," ",NamenodeName[x],"\t",NamenodeIP[x],"\n"])
     for y in range(0,len(DataNodeName)):
-        f.writelines([DataNodeName[y],"\t",DataNodeIP[y]])
+        f.writelines([DataNodeIP[y]," ",DataNodeName[y],"\t",DataNodeIP[y],"\n"])
     f.writelines(["\n\n",
     "# The following lines are desirable for IPV6 capable Hosts\n",
     "::1\tip6-localhost ip6-loopback\n",
@@ -113,6 +117,11 @@ def main():
     "ff02::2 ip6-allrouters\n"])
     f.close()
 
+
+    f=open("/etc/hosts.allow","a")
+    f.writelines(["ssh:192.168.0.1:allow\n",
+    "ssh:192.168.0.2:allow\n"])
+    f.close()
     f=open("/etc/hostname","w")
     for x in range(0,len(NamenodeName)):
         f.writelines([NamenodeName[x],"\n"])
@@ -175,9 +184,10 @@ def main():
     if(path.exists("/home/hduser/.ssh/id_rsa.pub")!=True):
         string="'ssh-keygen -t rsa'"
         stringx="'ssh-copy-id -i $HOME/.ssh/id_rsa.pub hduser@slave'"
-        os.system('su - hduser -c'+string)
+        os.system('su - hduser -c '+string)
         os.system('su - hduser -c '+stringx)
-
+    stringy="'ssh slave'"
+    os.system('su - hduser -c '+stringy)
     
 
     
